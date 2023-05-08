@@ -126,7 +126,7 @@ end
 
 def detect_winner(brd)
   WINNING_LINES.each do |line|
-    if brd.vales_at(*line).count(PLAYER_MARKER) == 3
+    if brd.values_at(*line).count(PLAYER_MARKER) == 3
       return 'Player'
     elsif brd.values_at(*line).count(COMPUTER_MARKER) == 3
       return 'Computer'
