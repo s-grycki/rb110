@@ -1,0 +1,18 @@
+welcome: |
+    Welcome to Tic Tac Toe! Enter r or rules to see the rules and config options.
+    Enter 1 to switch player and computer characters. Enter 2 for an optional timed feature.
+    Enter o or order to decide the order. Enter any other key to let computer decide.
+rules: |
+    Tic Tac Toe is a 2 player game played on a 3x3 board. Each player takes a turn
+    and marks a square on the board. First player to reach 3 squares in a row,
+    including diagonals, wins. If all 9 squares are marked and no player has 3
+    squares in a row, then the game is a tie.
+tie: It's a tie
+again: Play again? (y or n)
+bye: Thanks for playing Tic Tac Toe! Good bye!
+first: Who should go first? (computer(c) or player(p))
+valid: Please enter valid input
+lines: '     |     |     '
+dividers: -----+-----+-----
+
+
