@@ -95,6 +95,8 @@ Feature 4: Timed character placement
   - Allows player the choice of timed placement for computer
   - If enabled, computer will sleep for 1 second on given placements
   - 2 seconds for random placements
+Feature 5: Number of rounds
+  - Allows player to select number of rounds needed to win
 =end
 
 require 'yaml'
@@ -103,8 +105,6 @@ MESSAGES = YAML.load_file('ttt_messages.yml')
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
                 [[1, 5, 9], [3, 5, 7]]              # diagonals
-
-WIN_COUNT = { 'Player' => 0, 'Computer' => 0 }
 
 INITIAL_MARKER = ' '
 
@@ -117,19 +117,19 @@ def clear_screen
 end
 
 # rubocop:disable Metrics/AbcSize
-def display_board(brd)
-  puts "You're a #{brd[1]}. Computer is #{brd[2]}."
+def display_board(board)
+  puts "You're a #{board[1]}. Computer is #{board[2]}."
   puts ""
   puts(MESSAGES['lines'])
-  puts "  #{brd[0][1]}  |  #{brd[0][2]}  |  #{brd[0][3]}  "
+  puts "  #{board[0][1]}  |  #{board[0][2]}  |  #{board[0][3]}  "
   puts(MESSAGES['lines'])
   puts(MESSAGES['dividers'])
   puts(MESSAGES['lines'])
-  puts "  #{brd[0][4]}  |  #{brd[0][5]}  |  #{brd[0][6]}  "
+  puts "  #{board[0][4]}  |  #{board[0][5]}  |  #{board[0][6]}  "
   puts(MESSAGES['lines'])
   puts(MESSAGES['dividers'])
   puts(MESSAGES['lines'])
-  puts "  #{brd[0][7]}  |  #{brd[0][8]}  |  #{brd[0][9]}  "
+  puts "  #{board[0][7]}  |  #{board[0][8]}  |  #{board[0][9]}  "
   puts(MESSAGES['lines'])
   puts ""
 end
@@ -141,28 +141,8 @@ def initialize_board
   end
 end
 
-def order_picker(input)
-  input.downcase.start_with?('o') ? decide_order : %w(c p).sample
-end
-
-def decide_order
-  loop do
-    prompt(MESSAGES['first'])
-    ans = gets.chomp.downcase
-    if ans.start_with?('c', 'p')
-      return ans.chr
-    else
-      prompt(MESSAGES['valid'])
-    end
-  end
-end
-
-def board_and_markers(brd, player_char, computer_char)
-  [brd, player_char, computer_char]
-end
-
 def alternate_player(current_player)
-  current_player == 'c' ? 'p' : 'c'
+  current_player == 'Computer' ? 'Player' : 'Computer'
 end
 
 def joinor(empty_squares, delim = ', ', last = 'or')
@@ -175,129 +155,153 @@ def empty_squares(hsh)
   hsh.keys.select { |num| hsh[num] == INITIAL_MARKER }
 end
 
-def place_piece!(brd, current_player, timed)
-  computer_places_piece!(brd, timed) if current_player == 'c'
-  player_places_piece!(brd) if current_player == 'p'
+def place_piece!(board, current_player, timed)
+  computer_places_piece!(board, timed) if current_player == 'Computer'
+  player_places_piece!(board) if current_player == 'Player'
 end
 
-def player_places_piece!(brd)
+def player_places_piece!(board)
   square = ''
   loop do
-    prompt "Choose from squares: #{joinor(empty_squares(brd[0]))}"
+    prompt "Choose from squares: #{joinor(empty_squares(board[0]))}"
     square = gets.chomp.to_i
-    break if empty_squares(brd[0]).include?(square)
+    break if empty_squares(board[0]).include?(square)
     prompt(MESSAGES['valid'])
   end
 
-  brd[0][square] = brd[1]
+  board[0][square] = board[1]
 end
 
-def computer_places_piece!(brd, timed)
-  if brd[0][5] == ' '
-    set_5!(brd, timed)
-  elsif find_risk(brd).nil?
-    set_random!(brd, timed)
+def computer_places_piece!(board, timed)
+  if board[0][5] == ' '
+    set_5!(board, timed)
+  elsif find_risk(board).nil?
+    set_random!(board, timed)
   else
-    set_fixed!(brd, timed)
+    set_fixed!(board, timed)
   end
 end
 
-def find_at_risk_square(brd, idx)
+def find_at_risk_square(board, idx)
   WINNING_LINES.each do |line|
-    sub_brd = brd[0].select { |key, _| line.include?(key) }
-    if (brd[0].values_at(*line).count(brd[idx]) == 2) &&
-       (sub_brd.values.any?(INITIAL_MARKER))
-      return sub_brd.key(INITIAL_MARKER)
+    sub_board = board[0].select { |key, _| line.include?(key) }
+    if (board[0].values_at(*line).count(board[idx]) == 2) &&
+       (sub_board.values.any?(INITIAL_MARKER))
+      return sub_board.key(INITIAL_MARKER)
     end
   end
 end
 
-def find_risk(brd)
+def find_risk(board)
   idx = 2
   2.times do
-    val = find_at_risk_square(brd, idx)
+    val = find_at_risk_square(board, idx)
     return val if val != WINNING_LINES
     idx = 1
   end
   nil
 end
 
-def set_5!(brd, timed)
-  sleep 1 if timed
-  brd[0][5] = brd[2]
+def set_5!(board, timed)
+  sleep 1 if timed[0] == 'on'
+  board[0][5] = board[2]
 end
 
-def set_random!(brd, timed)
-  sleep 2 if timed
-  square = empty_squares(brd[0]).sample
-  brd[0][square] = brd[2]
+def set_random!(board, timed)
+  sleep 2 if timed[0] == 'on'
+  square = empty_squares(board[0]).sample
+  board[0][square] = board[2]
 end
 
-def set_fixed!(brd, timed)
-  sleep 1 if timed
-  val = find_risk(brd)
-  brd[0][val] = brd[2]
+def set_fixed!(board, timed)
+  sleep 1 if timed[0] == 'on'
+  val = find_risk(board)
+  board[0][val] = board[2]
 end
 
 def board_full?(board)
   !!empty_squares(board).empty?
 end
 
-def someone_won?(brd)
-  !!detect_winner(brd)
+def someone_won?(board)
+  !!detect_winner(board)
 end
 
-def detect_winner(brd)
+def detect_winner(board)
   WINNING_LINES.each do |line|
-    if brd[0].values_at(*line).count(brd[1]) == 3
+    if board[0].values_at(*line).count(board[1]) == 3
       return 'Player'
-    elsif brd[0].values_at(*line).count(brd[2]) == 3
+    elsif board[0].values_at(*line).count(board[2]) == 3
       return 'Computer'
     end
   end
   nil
 end
 
-def update_win_totals!(brd)
-  case detect_winner(brd)
-  when 'Player' then WIN_COUNT['Player'] += 1
-  when 'Computer' then WIN_COUNT['Computer'] += 1
+def update_win_totals!(board, win_count)
+  case detect_winner(board)
+  when 'Player' then win_count['Player'] += 1
+  when 'Computer' then win_count['Computer'] += 1
   end
 end
 
-def five_wins?
-  !!WIN_COUNT.values.any?(5)
+def display_wins(win_count)
+  win_count.each { |key, val| prompt("#{key} has #{val} wins!") }
+end
+
+def full_wins?(win_count, rounds)
+  !!win_count.values.any?(rounds)
+end
+
+def play_again?(answer)
+  !!answer.downcase.start_with?('y')
 end
 
 # main program
 player_char = 'X'
 computer_char = 'O'
-timed = false
+timed = %w(off on)
 board_info = nil
+first = %w(Random Player Computer)
+rounds = 5
 
 loop do
   input = ''
+  win_count = { 'Player' => 0, 'Computer' => 0 }
 
   loop do
     prompt(MESSAGES['welcome'])
-    input = gets.chomp.downcase
+    # rubocop:disable Layout/LineLength
+    prompt("Player: #{player_char}, Computer: #{computer_char}. Enter 'P' to switch")
+    # rubocop:enable Layout/LineLength
+    prompt("Starting Player: #{first[0]}. Enter 'O' to swtich")
+    prompt("Fast Mode: #{timed[0]}. Enter 'T' to toggle")
+    prompt("Number of winning rounds #{rounds}. Enter a number (1-9) to change")
+    prompt(MESSAGES['begin'])
+    input = gets.chomp.upcase
     clear_screen
     case input.chr
-    when 'r' then prompt(MESSAGES['rules'] + "\n")
-    when '1' then player_char, computer_char = computer_char, player_char
-    when '2' then timed = true
+    when 'R' then prompt(MESSAGES['rules'] + "\n")
+    when 'P' then player_char, computer_char = computer_char, player_char
+    when 'T' then timed = timed.rotate
+    when 'O' then first = first.rotate
+    when ('1'..'9') then rounds = input.to_i
     else break input
     end
   end
 
-  first = order_picker(input)
+  first = if first[0] == 'Random'
+            %w(Player Computer).sample
+          else
+            first[0]
+          end
 
   loop do
     board = initialize_board
     current_player = first
 
     loop do
-      board_info = board_and_markers(board, player_char, computer_char)
+      board_info = [board, player_char, computer_char]
       display_board(board_info)
       place_piece!(board_info, current_player, timed)
       current_player = alternate_player(current_player)
@@ -308,22 +312,21 @@ loop do
     display_board(board_info)
 
     if someone_won?(board_info)
-      update_win_totals!(board_info)
+      update_win_totals!(board_info, win_count)
       prompt "#{detect_winner(board_info)} won!"
     else
       prompt(MESSAGES['tie'])
     end
-
-    prompt("Player has #{WIN_COUNT['Player']} wins!")
-    prompt("Computer has #{WIN_COUNT['Computer']} wins!")
-    break prompt "#{WIN_COUNT.key(5)} is the winner!" if five_wins?
+    display_wins(win_count)
+    # rubocop:disable Layout/LineLength
+    break prompt "#{win_count.key(rounds)} is the winner!" if full_wins?(win_count, rounds)
+    # rubocop:enable Layout/LineLength
   end
 
   prompt(MESSAGES['again'])
   answer = gets.chomp
   clear_screen
-  break unless answer.downcase.start_with?('y')
-  WIN_COUNT.each_key { |key| WIN_COUNT[key] = 0 }
+  break unless play_again?(answer)
 end
 
 prompt(MESSAGES['bye'])
