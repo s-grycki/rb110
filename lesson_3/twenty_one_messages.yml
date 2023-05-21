@@ -1,0 +1,8 @@
+dividers: ===================
+invalid: Invalid input
+hit_stay?: Would you like to hit or stay?
+d_win: Dealer wins
+p_win: Player wins
+draw: It's a draw
+play_again?: Would you like to play again? (y/n)
+bye: Thank you for playing. Good bye!
