@@ -1,5 +1,30 @@
 =begin
-Problem: For each collection object where value 3 occurs, demonstrate changing this to 4
+PROBLEM: (Start with inputs/outputs if confused. 
+Read Problem -> See examples -> Ask questionss)
+For each of these collection objects where the
+value 3 occurs, demonstrate how you would change 
+this to 4.
+Input: 
+Output: 
+Rules: (Also clarifies edge cases and questions)
+  - 
+
+
+EXAMPLES:
+
+
+
+DATA STRUCTURES: (Update co-currently with algorithm, if needed)
+  - 
+
+<====== THOUGHT PAD ======>
+
+<=========================>
+
+
+Algorithm: (View as series of steps. Start high level on complex problems and
+think about extracting to helper methods)
+  - 
 =end
 
 arr1 = [1, [2, 3], 4]

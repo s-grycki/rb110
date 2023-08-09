@@ -1,12 +1,30 @@
 =begin
-Problem: Order the following array of hashes based on publication of each book, from
-earliest to latest
+PROBLEM: (Start with inputs/outputs if confused. 
+Read Problem -> See examples -> Ask questionss)
+How would you order this array of hashes based 
+on the year of publication of each book, 
+from the earliest to the latest?
+Input: 
+Output: 
+Rules: (Also clarifies edge cases and questions)
+  - 
 
-Algorithm:
-iterate through the books array
-sort each hash by publish year
 
-Code:
+EXAMPLES:
+
+
+
+DATA STRUCTURES: (Update co-currently with algorithm, if needed)
+  - 
+
+<====== THOUGHT PAD ======>
+
+<=========================>
+
+
+Algorithm: (View as series of steps. Start high level on complex problems and
+think about extracting to helper methods)
+  - 
 =end
 
 books = [
@@ -16,6 +34,4 @@ books = [
   {title: 'Ulysses', author: 'James Joyce', published: '1922'}
 ]
 
-p (books.sort_by do |book|
-  book[:published]
-end)
+p books.sort_by { |hash| hash[:published] }

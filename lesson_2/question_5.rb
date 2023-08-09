@@ -1,11 +1,28 @@
 =begin
-Problem: Determine the total age of only male members of the family from the hash
+PROBLEM: (Start with inputs/outputs if confused. 
+Read Problem -> See examples -> Ask questionss)
+Determine the total age of just the male members of the family.
+Input: 
+Output: 
+Rules: (Also clarifies edge cases and questions)
+  - 
 
-Algorithm:
-SELECT every value within the munster hash where gender = male
-SUM the value within every age key from returned hash
 
-Code:
+EXAMPLES:
+
+
+
+DATA STRUCTURES: (Update co-currently with algorithm, if needed)
+  - 
+
+<====== THOUGHT PAD ======>
+
+<=========================>
+
+
+Algorithm: (View as series of steps. Start high level on complex problems and
+think about extracting to helper methods)
+  - 
 =end
 
 munsters = {
@@ -16,16 +33,19 @@ munsters = {
   "Marilyn" => { "age" => 23, "gender" => "female"}
 }
 
-# Alternate solution
 males = munsters.select { |_, info| info['gender'] == 'male' }
 ages = []
 males.each { |_, info| ages << info['age'] }
 p ages.sum
 
+age = 0
+males = munsters.select { |_,hash| hash['gender'] == 'male' }
+males.each { |_,hash| age += hash['age'] }
+p age
 
-
-total_ages = 0
-munsters.each_value do |info|
-  total_ages += info['age'] if info['gender'] == 'male'
+total_male_age = 0
+munsters.each_value do |hash|
+  total_male_age += hash['age'] if hash['gender'] == 'male'
 end
-p total_ages
+
+p total_male_age

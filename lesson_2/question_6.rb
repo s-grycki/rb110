@@ -1,16 +1,31 @@
 =begin
-Problem: Given the hash, print out the name, age, and gender of each family member
+PROBLEM: (Start with inputs/outputs if confused. 
+Read Problem -> See examples -> Ask questionss)
+Given this previously seen family hash, 
+print out the name, age and gender of each family member:
+Input: 
+Output: 
+Rules: (Also clarifies edge cases and questions)
+  - 
 
-Examples:
+
+EXAMPLES:
 (Name) is a (age)-year-old (male or female).
 
-Algorithm:
-Iterate over each key/value pair
-  print out (key) is a (value['age'])-year-old (value['gender'])
 
-Code:
+DATA STRUCTURES: (Update co-currently with algorithm, if needed)
+  - 
+
+<====== THOUGHT PAD ======>
+
+<=========================>
+
+
+Algorithm: (View as series of steps. Start high level on complex problems and
+think about extracting to helper methods)
+  - Iterate over each key/value pair in munster hash
+    - print out the values
 =end
-
 
 munsters = {
   "Herman" => { "age" => 32, "gender" => "male" },
@@ -20,6 +35,6 @@ munsters = {
   "Marilyn" => { "age" => 23, "gender" => "female"}
 }
 
-munsters.each do |name, info|
-  puts "#{name} is a #{info['age']}-year-old #{info['gender']}"
+munsters.each do |name, details|
+  puts "#{name} is a #{details['age']}-year-old #{details['gender']}"
 end

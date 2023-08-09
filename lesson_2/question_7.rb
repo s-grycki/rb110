@@ -1,5 +1,35 @@
 =begin
-Problem: Given the code, what will be the final values of a and b?
+PROBLEM: (Start with inputs/outputs if confused. 
+Read Problem -> See examples -> Ask questionss)
+Given this code, what would be the final values of a and b?
+Input: 
+Output: 
+Rules: (Also clarifies edge cases and questions)
+  - 
+
+
+EXAMPLES:
+
+
+
+DATA STRUCTURES: (Update co-currently with algorithm, if needed)
+  - 
+
+<====== THOUGHT PAD ======>
+
+<=========================>
+
+
+Algorithm: (View as series of steps. Start high level on complex problems and
+think about extracting to helper methods)
+  - a points to immutable object 2
+  - b points to mutable array object with immutable 5 and 8
+  - arr points to new array with references to values pointed to by a and b
+    (They aren't pointing to the variables, just the same object in memory)
+  - first element of array is reassigned to 4. This doesn't impact the variable a
+    (Element assignment mutates the object, not the element)
+  - first element of second element is decremented by 2. This does impact variable b
+    (We're mutating the array here)
 =end
 
 a = 2
@@ -8,6 +38,10 @@ arr = [a, b]
 
 arr[0] += 2
 arr[1][0] -= a
+
+
+
+
 
 p arr
 p a

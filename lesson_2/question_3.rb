@@ -1,6 +1,31 @@
 =begin
-Problem: For each of the following objects, demonstrate how you would reference the letter 'g'
+PROBLEM: (Start with inputs/outputs if confused. 
+Read Problem -> See examples -> Ask questionss)
+For each of these collection objects demonstrate
+how you would reference the letter 'g'.
+Input: 
+Output: 
+Rules: (Also clarifies edge cases and questions)
+  - 
+
+
+EXAMPLES:
+
+
+
+DATA STRUCTURES: (Update co-currently with algorithm, if needed)
+  - 
+
+<====== THOUGHT PAD ======>
+
+<=========================>
+
+
+Algorithm: (View as series of steps. Start high level on complex problems and
+think about extracting to helper methods)
+  - 
 =end
+
 
 arr1 = ['a', 'b', ['c', ['d', 'e', 'f', 'g']]]
 p arr1[2][1][3]
